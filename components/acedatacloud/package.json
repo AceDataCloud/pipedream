@@ -1,12 +1,13 @@
 {
   "name": "@pipedream/acedatacloud",
-  "version": "0.0.1",
-  "description": "Ace Data Cloud chat actions for Pipedream",
+  "version": "0.0.2",
+  "description": "Ace Data Cloud chat and ACE Music actions for Pipedream",
   "main": "acedatacloud.app.mjs",
   "keywords": [
     "pipedream",
     "acedatacloud",
-    "chat"
+    "chat",
+    "ace-music"
   ],
   "homepage": "https://pipedream.com/apps/acedatacloud",
   "author": "Pipedream <support@pipedream.com> (https://pipedream.com/)",
