@@ -8,75 +8,36 @@ export default {
   type: "app",
   app: "acedatacloud",
   propDefinitions: {
-    chatModel: {
+    "chatModel": {
       type: "string",
       label: "Model",
-      description: "Published GPT chat model available through the connected API. E.g. `gpt-4o-mini`. Use **List Chat Models** and its `id` field to inspect the current options. The dropdown uses the same catalog; no model fallback is applied.",
+      description: "Published chat model available through the connected API. Use **List Chat Models** and its `id` field to inspect all model families. The dropdown uses the same catalog; no model fallback is applied. Example: `gpt-6.2-astra`.",
       async options() {
         return chatModelOptions(await this.listChatModels());
       },
     },
-    model: {
-      type: "string",
-      label: "Model",
-      description: "Public Seedream model. Lite supports larger output sizes; Pro supports higher quality single images. E.g. `doubao-seedream-5-0-lite-260128`.",
-      options: [
-        {
-          label: "Seedream 5.0 Lite",
-          value: "doubao-seedream-5-0-lite-260128",
-        },
-        {
-          label: "Seedream 5.0 Pro",
-          value: "doubao-seedream-5-0-pro-260628",
-        },
-      ],
-      default: "doubao-seedream-5-0-lite-260128",
-    },
-    prompt: {
+    "prompt": {
       type: "string",
       label: "Prompt",
-      description: "Describe the image to generate or the edit to make. E.g. `a blue glass cube on a white table`.",
-    },
-    imageUrl: {
-      type: "string",
-      label: "Image URL",
-      description: "Public HTTP or HTTPS image input. E.g. `https://example.com/photo.png`.",
-    },
-    size: {
-      type: "string",
-      label: "Size",
-      description: "Output size. Lite supports 2K, 3K, and 4K; Pro supports 1K, 1.5K, and 2K. E.g. `2K`.",
-      options: [
-        "1K",
-        "1.5K",
-        "2K",
-        "3K",
-        "4K",
-      ],
-      default: "2K",
-    },
-    watermark: {
-      type: "boolean",
-      label: "Watermark",
-      description: "Whether to add a watermark to the generated image. E.g. `false`.",
-      optional: true,
+      description: "Text to send to the selected model.",
     },
   },
   methods: {
     /**
-     * Load models from the authenticated API and the published GPT chat catalog.
+     * Load models from the authenticated API and the published typed chat catalog.
      * @param {Object} options - Optional Pipedream context.
      * @returns {Promise<Object[]>} Models present in both current lists.
      */
-    async listChatModels({ $ } = {}) {
+    async listChatModels({ $ = this } = {}) {
       const [
         available,
         published,
       ] = await Promise.all([
         this.request({
           $,
-          path: "/openai/models",
+          path: "/v1/models",
           method: "GET",
+          timeout: 20000,
         }),
         axios($, {
           method: "GET",
@@ -96,33 +57,15 @@ export default {
      * @returns {Promise<Object>} API response.
      */
     request({
-      $, path, data, method, params,
+      $ = this, path, data, method, timeout,
     }) {
       return axios($, requestOptions({
         apiKey: this.$auth.api_key,
         path,
         data,
         method,
-        params,
+        timeout,
       }));
-    },
-    /**
-     * Submit one image job. Never retry a paid POST automatically.
-     * @param {Object} options - Pipedream context and image body.
-     * @returns {Promise<Object>} Submission envelope with task ID.
-     */
-    submitImage({
-      $, data,
-    }) {
-      return this.request({
-        $,
-        path: "/seedream/images",
-        data: {
-          ...data,
-          response_format: "url",
-          async: true,
-        },
-      });
     },
   },
 };

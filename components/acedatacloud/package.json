@@ -1,23 +1,13 @@
 {
   "name": "@pipedream/acedatacloud",
-  "version": "0.0.3",
-  "description": "Ace Data Cloud GPT chat, ACE Music, Suno music, Seedance, HappyHorse, GPT Image and Nano Banana actions for Pipedream Connect and MCP",
+  "version": "0.0.2",
+  "description": "Ace Data Cloud chat and ACE Music actions for Pipedream",
   "main": "acedatacloud.app.mjs",
   "keywords": [
     "pipedream",
     "acedatacloud",
-    "ace-data-cloud",
-    "suno",
-    "seedance",
-    "happyhorse",
-    "happy-horse",
-    "gpt-image",
-    "nano-banana",
     "chat",
-    "image",
-    "video",
-    "audio",
-    "acemusic"
+    "ace-music"
   ],
   "homepage": "https://pipedream.com/apps/acedatacloud",
   "author": "Pipedream <support@pipedream.com> (https://pipedream.com/)",
