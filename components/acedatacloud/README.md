@@ -8,3 +8,5 @@ Connect an [Ace Data Cloud application API token](https://platform.acedata.cloud
 ACE Music actions generate a song from a prompt or lyrics, import a reference MP3, cover a track, or blend two tracks. Each action makes one paid submission to the [ACE Music API](https://github.com/AceDataCloud/ACEMusicAPI) and returns its task ID. Save that ID to retrieve the result from your Ace Data Cloud account. If a submission times out, check your task history before retrying.
 
 Run `npm test` from this directory to exercise the chat and music actions with fixtures.
+
+Import ACE Music Asset supports an enabled MIDI, image or video type. Get ACE Music Asset and List ACE Music Assets use authenticated free reads. Supply the returned asset ID and type when generating a v1.1 song from an idea.
