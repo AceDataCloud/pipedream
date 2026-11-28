@@ -16,10 +16,16 @@ export function musicModel(value = models[0]) {
   return value;
 }
 
-export function referenceUrl(value) {
-  const url = new URL(referenceText(value, "Public MP3 URL"));
+export const assetTypes = [
+  "midi",
+  "image",
+  "video",
+];
+
+export function referenceUrl(value, label = "Public MP3 URL") {
+  const url = new URL(referenceText(value, label));
   if (url.protocol !== "https:" || url.username || url.password || !url.hostname) {
-    throw new Error("Provide a public HTTPS MP3 URL.");
+    throw new Error("Provide a public HTTPS URL.");
   }
   return url.href;
 }
@@ -50,12 +56,12 @@ export function twoTracks(first, second) {
  * @param {Object} data - Fields for this audio action.
  * @returns {Promise<Object>} The submitted task ID and state.
  */
-export async function submitMusic($, app, data) {
+export async function submitMusic($, app, data, path = "/acemusic/audios") {
   let response;
   try {
     response = await app.request({
       $,
-      path: "/acemusic/audios",
+      path,
       method: "POST",
       data: {
         ...data,

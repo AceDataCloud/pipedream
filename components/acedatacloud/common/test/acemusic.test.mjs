@@ -288,3 +288,67 @@ test("invalid inputs are rejected before the paid request", async () => {
     assert.equal(calls, 0);
   }
 });
+
+test("reference import and reads share the assets endpoint", async () => {
+  const calls = [];
+  const request = async ({
+    path, data,
+  }) => { calls.push([
+    path,
+    data,
+  ]); return {
+    task_id: "original",
+    items: [],
+  }; };
+  const ctx = {
+    $: {
+      export: () => {},
+    },
+  };
+  await (await loadAction("import-ace-music-asset")).run.call({
+    acedatacloud: {
+      request,
+    },
+    type: "midi",
+    url: "https://example.com/song.mid",
+  }, ctx);
+  await (await loadAction("get-ace-music-asset")).run.call({
+    acedatacloud: {
+      request,
+    },
+    id: "a",
+  }, ctx);
+  await (await loadAction("list-ace-music-assets")).run.call({
+    acedatacloud: {
+      request,
+    },
+    type: "image",
+  }, ctx);
+  assert.deepEqual(calls, [
+    [
+      "/acemusic/assets",
+      {
+        action: "upload",
+        type: "midi",
+        url: "https://example.com/song.mid",
+        async: true,
+      },
+    ],
+    [
+      "/acemusic/assets",
+      {
+        action: "retrieve",
+        id: "a",
+      },
+    ],
+    [
+      "/acemusic/assets",
+      {
+        action: "retrieve",
+        page: 1,
+        page_size: 20,
+        type: "image",
+      },
+    ],
+  ]);
+});
